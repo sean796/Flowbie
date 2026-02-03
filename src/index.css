@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 150 100% 50%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 8%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 150 100% 50%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 12%;
+    --input: 0 0% 8%;
+    --ring: 150 100% 50%;
+
+    --radius: 0.5rem;
+
+    --flowbie-glow: 150 100% 50%;
+    --flowbie-glow-subtle: 150 80% 40%;
+    --canvas-bg: 0 0% 0%;
+    --node-bg: 0 0% 4%;
+    --node-border: 0 0% 12%;
+    
+    --gradient-neural: linear-gradient(135deg, hsl(150 100% 50% / 0.1), hsl(170 100% 50% / 0.05));
+    --shadow-glow: 0 0 20px hsl(150 100% 50% / 0.3);
+    --shadow-glow-intense: 0 0 30px hsl(150 100% 50% / 0.5);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .flowbie-grid {
+    background-image: 
+      linear-gradient(white 1px, transparent 1px),
+      linear-gradient(90deg, white 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .glow-text {
+    text-shadow: 0 0 10px hsl(var(--flowbie-glow) / 0.5);
+  }
+
+  .glow-border {
+    box-shadow: 0 0 15px hsl(var(--flowbie-glow) / 0.4);
+  }
+
+  .react-flow__node {
+    cursor: move;
+  }
+
+  .react-flow__handle {
+    cursor: crosshair;
+  }
+
+  .react-flow__edge-path {
+    stroke: hsl(var(--primary)) !important;
+  }
+
+  .react-flow__controls {
+    background: hsl(var(--card)) !important;
+    border: 1px solid hsl(var(--border)) !important;
+  }
+
+  .react-flow__controls-button {
+    background: hsl(var(--background)) !important;
+    border-bottom: 1px solid hsl(var(--border)) !important;
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .react-flow__controls-button:hover {
+    background: hsl(var(--accent)) !important;
+  }
+
+  /* Custom scrollbar styling - thin, light grey borders */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(0 0% 50%) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: hsl(0 0% 50%);
+    border-radius: 4px;
+    border: 1px solid hsl(0 0% 70%);
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(0 0% 60%);
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* Scrollbar for report content - matches default sidebar size */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(0 0% 50%) transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: hsl(0 0% 50%);
+    border-radius: 4px;
+    border: 1px solid hsl(0 0% 70%);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(0 0% 60%);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}

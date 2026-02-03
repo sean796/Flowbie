@@ -1,0 +1,24 @@
+Python ML Service - Installation Commands
+==========================================
+
+Copy and paste these commands one at a time into your terminal:
+
+1. Navigate to the Python ML service directory:
+cd server\python-ml-service
+
+2. Install core dependencies (should work on all Python versions):
+python -m pip install fastapi uvicorn requests python-dotenv pydantic
+
+3. Install ML dependencies (may require Visual Studio Build Tools on Python 3.14):
+python -m pip install numpy gensim scikit-learn
+
+OR install everything at once:
+python -m pip install -r requirements.txt
+
+If step 3 fails, you may need to:
+- Install Visual Studio Build Tools (Desktop development with C++)
+- Or use Python 3.11 or 3.12 instead of 3.14
+
+
+
+

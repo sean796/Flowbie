@@ -1,0 +1,9 @@
+{
+  "site": "your-wpengine-site-name",
+  "host": "your-site.ftp.wpengine.com",
+  "port": 22,
+  "protocol": "sftp",
+  "username": "your-site%your-username",
+  "password": "your-ftp-password",
+  "remotePath": "/public/"
+}

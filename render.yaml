@@ -1,0 +1,13 @@
+# Render Blueprint - optional. Set env vars (DATAFORSEO_API_LOGIN, DATAFORSEO_API_PASSWORD, etc.) in Render dashboard.
+services:
+  - type: web
+    name: flowbie-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Add in Render dashboard: DATAFORSEO_API_LOGIN, DATAFORSEO_API_PASSWORD
+      # Optional: PYTHON_ML_SERVICE_URL if you deploy the Python ML service

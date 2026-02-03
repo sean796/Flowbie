@@ -1,0 +1,38 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.env.local
+.env.*.local
+
+# WP Engine deploy config (contains credentials)
+wpengine-deploy.config.json
+
+# Local credential overrides (never commit)
+gsc-config.local.js
+*-credentials*.json
+*.credentials.json
+
+# Report date range (AI agents read this; per-user local state)
+REPORT_DATE_RANGE.md
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
