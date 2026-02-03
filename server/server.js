@@ -32,6 +32,22 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
+// Root route - API info (avoids "Cannot GET /" when visiting base URL)
+app.get('/', (req, res) => {
+  res.json({
+    name: 'Flowbie API',
+    status: 'running',
+    health: '/api/mcp/health',
+    endpoints: {
+      mcp: '/api/mcp/*',
+      wordpress: '/api/wordpress/*',
+      gsc: '/api/gsc/*',
+      knowledgeModel: '/api/knowledge-model/*',
+      wpengine: '/api/wpengine/*'
+    }
+  });
+});
+
 // Register routes
 app.use(dataForSEORoutes);
 
