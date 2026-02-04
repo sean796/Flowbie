@@ -23,15 +23,27 @@ router.get('/test-connection', async (req, res) => {
     
     console.log('[GSC Test] Authentication successful');
     
-    // Create GSC API client using searchconsole (v1) for sites.list()
-    const searchconsole = google.searchconsole({
-      version: 'v1',
+    // Use webmasters v3 for sites.list() — documented endpoint is www.googleapis.com/webmasters/v3/sites
+    // and returns { siteEntry: [] } when empty; searchconsole v1 uses searchconsole.googleapis.com and can return {}
+    const webmasters = google.webmasters({
+      version: 'v3',
       auth: authClient
     });
     
     // List all sites the service account has access to
     console.log('[GSC Test] Calling sites.list()...');
-    const response = await searchconsole.sites.list();
+    // #region agent log
+    fetch('http://127.0.0.1:7260/ingest/b991f7d7-41bc-4d2b-b6c2-f5dd1819982c',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'gsc-connection.js:pre-list',message:'About to call sites.list (webmasters v3)',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'post-fix',hypothesisId:'H1'})}).catch(()=>{});
+    // #endregion
+    const response = await webmasters.sites.list();
+    const dataKeys = response.data ? Object.keys(response.data) : [];
+    const siteEntry = response.data?.siteEntry;
+    const siteEntryType = typeof siteEntry;
+    const siteEntryIsArray = Array.isArray(siteEntry);
+    const siteEntryLength = siteEntryIsArray ? siteEntry.length : -1;
+    // #region agent log
+    fetch('http://127.0.0.1:7260/ingest/b991f7d7-41bc-4d2b-b6c2-f5dd1819982c',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'gsc-connection.js:after-list',message:'sites.list response',data:{dataKeys,siteEntryType,siteEntryIsArray,siteEntryLength,rawDataSample:response.data ? JSON.stringify(response.data).slice(0,1500) : null},timestamp:Date.now(),sessionId:'debug-session',runId:'post-fix',hypothesisId:'H2'})}).catch(()=>{});
+    // #endregion
     
     const sites = response.data.siteEntry || [];
     
@@ -85,6 +97,9 @@ router.get('/test-connection', async (req, res) => {
         originalFormat: originalUrl // Keep original for reference
       };
     });
+    // #region agent log
+    fetch('http://127.0.0.1:7260/ingest/b991f7d7-41bc-4d2b-b6c2-f5dd1819982c',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'gsc-connection.js:after-first-map',message:'After first normalize map',data:{sitesLength:sites.length,normalizedSitesLength:normalizedSites.length},timestamp:Date.now(),sessionId:'debug-session',runId:'post-fix',hypothesisId:'H4'})}).catch(()=>{});
+    // #endregion
     
     // FINAL SANITY CHECK - Force normalize ALL sites one more time before sending
     // This is the LAST chance to fix any sc-domain: entries
@@ -131,6 +146,9 @@ router.get('/test-connection', async (req, res) => {
       };
     });
     
+    // #region agent log
+    fetch('http://127.0.0.1:7260/ingest/b991f7d7-41bc-4d2b-b6c2-f5dd1819982c',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'gsc-connection.js:final-count',message:'Final site count before response',data:{sitesLength:sites.length,finalNormalizedSitesLength:finalNormalizedSites.length,siteUrls:finalNormalizedSites.map(s=>s.siteUrl)},timestamp:Date.now(),sessionId:'debug-session',runId:'post-fix',hypothesisId:'H1'})}).catch(()=>{});
+    // #endregion
     console.log(`[GSC Test] Found ${sites.length} site(s):`, finalNormalizedSites.map(s => s.siteUrl));
     console.log(`[GSC Test] Original formats:`, sites.map(s => s.siteUrl));
     console.log(`[GSC Test] VERIFICATION - Any sc-domain remaining?`, finalNormalizedSites.filter(s => s.siteUrl.toLowerCase().includes('sc-domain')));
@@ -147,6 +165,11 @@ router.get('/test-connection', async (req, res) => {
     });
     
   } catch (error) {
+    // #region agent log
+    const errStatus = error.response?.status;
+    const errData = error.response?.data;
+    fetch('http://127.0.0.1:7260/ingest/b991f7d7-41bc-4d2b-b6c2-f5dd1819982c',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'gsc-connection.js:catch',message:'Test connection threw',data:{message:error.message,status:errStatus,responseDataKeys:errData?Object.keys(errData):null},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'H5'})}).catch(()=>{});
+    // #endregion
     console.error('[GSC Test] Error testing connection:', error);
     console.error('[GSC Test] Error details:', {
       name: error.name,

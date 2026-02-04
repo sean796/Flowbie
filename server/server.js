@@ -8,6 +8,10 @@
  * 3. The server will run on http://localhost:3001
  */
 
+// Load .env from project root so DATAFORSEO_API_LOGIN / DATAFORSEO_API_PASSWORD are set before config
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+
 const express = require('express');
 const cors = require('cors');
 const { DATAFORSEO_CREDENTIALS } = require('./config');
@@ -278,7 +282,6 @@ app.get('/api/mcp/health', (req, res) => {
 const PORT = process.env.PORT || 3001;
 // #region agent log
 const fs = require('fs');
-const path = require('path');
 const logPath = path.join(__dirname, '..', '.cursor', 'debug.log');
 function ensureDebugLogDir() {
   try {

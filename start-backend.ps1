@@ -25,11 +25,13 @@ if (-not (Test-Path "server\node_modules")) {
     Write-Host ""
 }
 
-# Start the server
+# Start the server (legacy OpenSSL provider required for GSC service account JWT)
 Write-Host "🚀 Starting server on http://localhost:3001..." -ForegroundColor Green
 Write-Host "Press Ctrl+C to stop the server" -ForegroundColor Yellow
 Write-Host ""
 
 Set-Location server
-node mcp-api-server.js
+$env:NODE_OPTIONS = "--openssl-legacy-provider"
+# Prefer server.js if present (full backend), else mcp-api-server.js
+if (Test-Path "server.js") { node server.js } else { node mcp-api-server.js }
 

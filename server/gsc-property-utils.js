@@ -13,12 +13,12 @@ const { authenticateGSC } = require('./gsc-auth');
 async function findMatchingGSCProperty(siteUrl) {
   try {
     const authClient = await authenticateGSC(false);
-    const searchconsole = google.searchconsole({
-      version: 'v1',
+    const webmasters = google.webmasters({
+      version: 'v3',
       auth: authClient
     });
     
-    const response = await searchconsole.sites.list();
+    const response = await webmasters.sites.list();
     const sites = response.data.siteEntry || [];
     
     // Normalize the input URL for matching

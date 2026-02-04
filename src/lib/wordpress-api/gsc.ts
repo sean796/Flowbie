@@ -46,14 +46,23 @@ export async function fetchGSCPagePerformance(
 
     if (!response.ok) {
       const errorText = await response.text();
-      let errorData;
+      let errorData: { error?: string; message?: string; hint?: string; serviceAccountEmail?: string };
       try {
         errorData = JSON.parse(errorText);
       } catch {
         errorData = { error: errorText };
       }
 
-      throw new Error(errorData.error || errorData.message || `HTTP ${response.status}`);
+      let message = errorData.error || errorData.message || `HTTP ${response.status}`;
+      if (errorData.serviceAccountEmail || errorData.hint) {
+        if (errorData.serviceAccountEmail) {
+          message += `\n\nService account: ${errorData.serviceAccountEmail}`;
+        }
+        if (errorData.hint) {
+          message += `\n\n${errorData.hint}`;
+        }
+      }
+      throw new Error(message);
     }
 
     const data = await response.json();

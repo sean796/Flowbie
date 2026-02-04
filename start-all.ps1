@@ -76,11 +76,12 @@ function Wait-ForServer {
     return $false
 }
 
-# Start backend server in background
+# Start backend server in background (legacy OpenSSL provider required for GSC service account JWT)
 Write-Host "🔧 Starting backend server (port 3001)..." -ForegroundColor Cyan
 $backendJob = Start-Job -ScriptBlock {
     Set-Location $using:PWD
     Set-Location server
+    $env:NODE_OPTIONS = "--openssl-legacy-provider"
     node server.js
 }
 

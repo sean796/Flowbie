@@ -40,12 +40,19 @@ function loadConfig() {
     console.error('Config must include password or passwordPath to a file containing the password.');
     process.exit(1);
   }
+  let remotePath = (config.remotePath || '/public/').replace(/\/+$/, '') || '/public';
+  const subPath = process.env.WPENGINE_SUBPATH;
+  if (subPath && subPath.trim()) {
+    remotePath = remotePath + '/' + subPath.trim().replace(/^\/+/, '') + '/';
+  } else {
+    remotePath = remotePath + '/';
+  }
   return {
     host: config.host.replace(/^sftp:\/\//, ''),
     port: config.port || 22,
     username: config.username,
     password,
-    remotePath: config.remotePath || '/public/'
+    remotePath
   };
 }
 
@@ -72,6 +79,7 @@ async function main() {
     });
     await sftp.uploadDir(distDir, config.remotePath);
     console.log('\nDeploy complete.');
+    console.log('Tip: If GSC connect/scan fails, add GSC_SERVICE_ACCOUNT_JSON to your backend env (e.g. Render → flowbie-api → Environment).');
   } catch (err) {
     console.error('Deploy failed:', err.message);
     process.exit(1);

@@ -22,6 +22,7 @@ wpengine-deploy.config.json
 gsc-config.local.js
 *-credentials*.json
 *.credentials.json
+server/credentials/
 
 # Report date range (AI agents read this; per-user local state)
 REPORT_DATE_RANGE.md

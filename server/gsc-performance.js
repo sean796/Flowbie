@@ -6,6 +6,7 @@
 const express = require('express');
 const { google } = require('googleapis');
 const { authenticateGSC } = require('./gsc-auth');
+const { gscPropertyErrorPayload } = require('./gsc-config');
 const { findMatchingGSCProperty, generatePropertyCandidates } = require('./gsc-property-utils');
 const { validateDates } = require('./gsc-validation');
 
@@ -237,10 +238,7 @@ router.post('/fetch-performance-stats', async (req, res) => {
       // #region agent log
       fetch('http://127.0.0.1:7252/ingest/bab6957c-2bf9-434e-a543-29f3beb37d51',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'gsc-performance.js:660',message:'All property formats failed',data:{siteUrl,propertyCandidates,errorStatus,lastErrorMessage,triedCount:propertyCandidates.length},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
       // #endregion
-      return res.status(errorStatus || 404).json({
-        success: false,
-        error: 'Failed to find valid GSC property. Please verify the site URL and service account permissions.'
-      });
+      return res.status(errorStatus || 404).json(gscPropertyErrorPayload());
     }
 
     // Fetch stats for both periods
@@ -524,10 +522,7 @@ router.post('/fetch-page-performance', async (req, res) => {
       // #region agent log
       fetch('http://127.0.0.1:7252/ingest/bab6957c-2bf9-434e-a543-29f3beb37d51',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'gsc-performance.js:900',message:'All property formats failed (page performance)',data:{siteUrl,propertyCandidates,errorStatus,lastErrorMessage,triedCount:propertyCandidates.length},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
       // #endregion
-      return res.status(errorStatus || 404).json({
-        success: false,
-        error: 'Failed to find valid GSC property. Please verify the site URL and service account permissions.'
-      });
+      return res.status(errorStatus || 404).json(gscPropertyErrorPayload());
     }
     
     // Step 1: Fetch ALL pages from GSC to see what format they're stored in
@@ -907,10 +902,7 @@ router.post('/fetch-historical-stats', async (req, res) => {
     }
 
     if (!successfulProperty) {
-      return res.status(404).json({
-        success: false,
-        error: 'Failed to find valid GSC property.'
-      });
+      return res.status(404).json(gscPropertyErrorPayload());
     }
 
     // Fetch monthly aggregated data
@@ -1114,10 +1106,7 @@ router.post('/fetch-entity-pages-performance', async (req, res) => {
     }
 
     if (!successfulProperty) {
-      return res.status(404).json({
-        success: false,
-        error: 'Failed to find valid GSC property.'
-      });
+      return res.status(404).json(gscPropertyErrorPayload());
     }
 
     // Fetch ALL pages for current period

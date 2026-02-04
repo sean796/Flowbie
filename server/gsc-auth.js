@@ -21,7 +21,7 @@ async function authenticateGSC(requireWriteAccess = false) {
   const auth = new google.auth.GoogleAuth({
     credentials: {
       client_email: GSC_SERVICE_ACCOUNT.client_email,
-      private_key: GSC_SERVICE_ACCOUNT.private_key.replace(/\\n/g, '\n'),
+      private_key: GSC_SERVICE_ACCOUNT.private_key,
       project_id: GSC_SERVICE_ACCOUNT.project_id,
     },
     scopes: [scope],

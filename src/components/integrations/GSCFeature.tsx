@@ -191,9 +191,13 @@ export const GSCFeature: React.FC<GSCFeatureProps> = ({ onRef }) => {
           { duration: 10000 }
         );
       } else {
+        const serviceEmail = data.serviceAccount || 'your service account';
         toast.warning(
-          `⚠️ Connected but no sites found.\n\nPlease verify the service account has access to properties in Google Search Console.`,
-          { duration: 10000 }
+          `⚠️ Connected but no sites found.`,
+          {
+            description: `Add this user in Google Search Console for each property:\n${serviceEmail}\n\nIn GSC: Settings → Users and permissions → Add user (at least Restricted access).`,
+            duration: 12000,
+          }
         );
       }
       

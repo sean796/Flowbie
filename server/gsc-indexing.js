@@ -8,6 +8,7 @@ const { google } = require('googleapis');
 const axios = require('axios');
 const xml2js = require('xml2js');
 const { authenticateGSC } = require('./gsc-auth');
+const { gscPropertyErrorPayload } = require('./gsc-config');
 const { findMatchingGSCProperty, generatePropertyCandidates } = require('./gsc-property-utils');
 
 const router = express.Router();
@@ -358,10 +359,7 @@ router.post('/index-sitemap-urls', async (req, res) => {
       }
       
       if (!successfulProperty) {
-        return res.status(404).json({
-          success: false,
-          error: 'Failed to find valid GSC property. Please verify the site URL and service account permissions.'
-        });
+        return res.status(404).json(gscPropertyErrorPayload());
       }
       
       // Process URLs with rate limiting

@@ -1,4 +1,8 @@
-# Render Blueprint - optional. Set env vars (DATAFORSEO_API_LOGIN, DATAFORSEO_API_PASSWORD, etc.) in Render dashboard.
+# Render Blueprint - optional. Set env vars in Render dashboard (Environment tab).
+# Required for full functionality:
+#   DATAFORSEO_API_LOGIN, DATAFORSEO_API_PASSWORD - DataForSEO API
+#   GSC_SERVICE_ACCOUNT_JSON - Full Google Search Console service account JSON (one line). Required for GSC scan/connect when using the app (e.g. after deploying frontend to WP Engine).
+# Optional: PYTHON_ML_SERVICE_URL if you deploy the Python ML service
 services:
   - type: web
     name: flowbie-api
@@ -9,5 +13,4 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      # Add in Render dashboard: DATAFORSEO_API_LOGIN, DATAFORSEO_API_PASSWORD
-      # Optional: PYTHON_ML_SERVICE_URL if you deploy the Python ML service
+      # Add in Render dashboard: DATAFORSEO_API_LOGIN, DATAFORSEO_API_PASSWORD, GSC_SERVICE_ACCOUNT_JSON
