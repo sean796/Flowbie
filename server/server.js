@@ -14,6 +14,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const express = require('express');
 const cors = require('cors');
+const session = require('express-session');
 const { DATAFORSEO_CREDENTIALS } = require('./config');
 const dataForSEORoutes = require('./dataforseo-routes');
 const wordPressRoutes = require('./wordpress-routes');
@@ -23,6 +24,7 @@ const googleMapsImageRoutes = require('./google-maps-image-routes');
 const companyScraperRoutes = require('./company-scraper-routes');
 const wpEngineRoutes = require('./wpengine-routes');
 const deathStarRoutes = require('./death-star-routes');
+const authRoutes = require('./auth-routes');
 
 // Step 2: Router Load Verification
 console.log('[Server] WordPress router type:', typeof wordPressRoutes);
@@ -30,11 +32,51 @@ console.log('[Server] WordPress router is function:', typeof wordPressRoutes ===
 
 const app = express();
 
-app.use(cors());
+// CORS: allow frontend origins (Render static site + custom domain). Default cors() allows all; explicit origins ensure headers on all responses.
+const allowedOrigins = [
+  'https://flowbie-1.onrender.com',
+  'https://app.flowbie.ca',
+  'http://localhost:8080',
+  'http://localhost:5173',
+  'http://127.0.0.1:8080',
+  'http://127.0.0.1:5173',
+];
+if (process.env.CORS_ORIGIN) {
+  process.env.CORS_ORIGIN.split(',').forEach((o) => {
+    const t = o.trim();
+    if (t && !allowedOrigins.includes(t)) allowedOrigins.push(t);
+  });
+}
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    return cb(null, false);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 // Increase body parser limit to handle large WordPress post content (default is 100kb)
 // WordPress posts with HTML content can easily exceed 100kb
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+// Session for admin login (must be before auth routes)
+const sessionSecret = process.env.SESSION_SECRET || 'flowbie-session-secret-change-in-production';
+app.use(session({
+  secret: sessionSecret,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  },
+}));
+
+// Auth routes (login, logout, me)
+app.use('/api/auth', authRoutes);
 
 // Root route - API info (avoids "Cannot GET /" when visiting base URL)
 app.get('/', (req, res) => {

@@ -11,6 +11,12 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     proxy: {
+      // Proxy auth to backend server
+      '/api/auth': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        secure: false,
+      },
       // Proxy MCP API calls to backend server
       '/api/mcp': {
         target: 'http://localhost:3001',
