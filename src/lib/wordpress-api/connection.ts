@@ -56,7 +56,7 @@ export async function testWordPressConnection(
         `Cannot connect to backend server at ${url}\n\n` +
         `Please ensure the backend server is running:\n` +
         `1. Open a terminal in the project root\n` +
-        `2. Run: node server/mcp-api-server.js\n` +
+        `2. Run: node server/server.js (from project root)\n` +
         `The server should start on http://localhost:3001`
       );
     }

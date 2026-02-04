@@ -74,12 +74,12 @@ async function callMCPTool(toolName: string, params: any): Promise<any> {
         `Cannot connect to MCP API server at ${currentUrl}\n\n` +
         `Please start the backend server:\n\n` +
         `1. Open a terminal in the project root directory\n` +
-        `2. Run: node server/mcp-api-server.js\n\n` +
+        `2. Run: node server/server.js (from project root)\n\n` +
         `The server should start on http://localhost:3001\n\n` +
-        `Or if you're using npm:\n` +
+        `Or from the server folder:\n` +
         `1. cd server\n` +
         `2. npm install (if not already done)\n` +
-        `3. node mcp-api-server.js\n\n` +
+        `3. node server.js\n\n` +
         `Alternative: Set VITE_MCP_API_BASE in your .env file to point to your backend URL.`
       );
     }
